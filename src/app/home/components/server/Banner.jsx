@@ -16,7 +16,7 @@ const Banner = () => {
         </div>
       </div>
       <div className="flex-1 lg:w-80 lg:ml-20 relative z-0 c-banner--rgt">
-          <Image className="w-full h-screen object-cover" src={BannerImg} alt="Banner" />
+          <Image className="w-full h-screen object-cover" src={BannerImg} alt="Banner" loading='lazy' />
         </div>
       </div>
       </div>

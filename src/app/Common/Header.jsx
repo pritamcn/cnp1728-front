@@ -14,14 +14,13 @@ export async function getdata() {
 }
 const Header = async ({params}) => {
   const { data } = await getdata();
-  // console.log("HeaderParams",params)
   return (
     <header className="c-header-wrap  u-header-bg relative z-10">
       <div className="container">
         <div className="flex flex-wrap items-center justify-center py-5">
           <Link href="/">
             <div className="py-1 text-center">
-              <Image src={Logo} alt="Logo" />
+              <Image src={Logo} alt="Logo" loading="lazy" />
             </div>
           </Link>
           <Category value={data?.allParents} />
@@ -58,7 +57,8 @@ const Header = async ({params}) => {
                     aria-selected="false"
                   >
                     <div className="c-tab-icon block mx-auto text-center mb-3">
-                      <Image src={item.icon !==null ?imagePath+item.icon:Cate2} className="mx-auto" alt="Cate2" width={50} height={50}/>
+                      <Image src={item.icon !==null ?imagePath+item.icon:Cate2} className="mx-auto" 
+                      alt="Cate2" width={50} height={50} loading="lazy"/>
                     </div>
                     <span>
                       {item?.displayName}

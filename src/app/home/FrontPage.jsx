@@ -6,6 +6,7 @@ import Advertisement from './components/server/Advertisement';
 import FeaturedCategories from './components/Client/FeaturedCategories';
 import PopularComparison from './components/Client/PopularComparison';
 import { fetchTopCategories } from '../data/TopCategories';
+import NewComparison from '../Common/NewComparison';
 export async function getdata() {
   const data = await fetchTopCategories();
   return {
@@ -21,6 +22,7 @@ const FrontPage = async() => {
       <Advertisement/>
       <FeaturedCategories value={data}/>
       <PopularComparison/>
+      <NewComparison/>
       </>
   )
 }

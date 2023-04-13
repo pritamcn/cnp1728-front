@@ -68,6 +68,7 @@ const page = async (context) => {
              alt="BestPrice"
              width={500}
              height={500}
+             loading="lazy"
            />
          </div>
 
@@ -92,6 +93,7 @@ const page = async (context) => {
               alt="BestPrice"
               width={500}
               height={500}
+              loading="lazy"
             />
           </div>
 

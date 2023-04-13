@@ -1,4 +1,5 @@
 import Header from "@/app/Common/Header"
+import NewComparison from "@/app/Common/NewComparison";
 import NormalCategoriesbar from "@/app/Common/NormalCategoriesbar"
 import { fetchComparisons } from "@/app/data/Comparisons";
 
@@ -18,10 +19,11 @@ export default async function SubCategoriesLayout({ children,params}) {
   return (
       <div>
         <Header params={data}/>
-        <NormalCategoriesbar value={data.normalCategoriesList} level3Categories={data?.level3CategoriesList}
+        <NormalCategoriesbar value={data?.normalCategoriesList} level3Categories={data?.level3CategoriesList}
         length={length}
         />
         {children}
+        <NewComparison/>
       </div>
   )
 }

@@ -11,6 +11,7 @@ import Description from "../Components/Client/Description";
 import { fetchProductDetails } from "@/app/data/ProductDetails";
 import { renderMarkdownToHTML } from "@/app/Common/Rendermarkdowntohtml";
 import { imagePath } from "@/app/config";
+import { notFound } from "next/navigation";
 export async function getdata(value) {
   const data = await fetchProductDetails(value);
   return {
@@ -22,6 +23,9 @@ const page =async (context) => {
   const filteredNormalCategories=data?.normalCategoriesList?.filter(x=>x.isThisInputId===true)
   const otherproductdata=data?.otherProductsList?.filter((product)=>product?.productId !=context.params.slug)
   let realProduct=data?.otherProductsList?.filter((product)=>product?.productId ==context.params.slug)[0]
+  if (data?.message ==="Product not found") {
+    notFound();
+  }
   return (
     <section className="c-pro-listing">
       <div className="container">
@@ -143,8 +147,8 @@ const page =async (context) => {
                     </h6> */}
                     {/* <p className="white-text">GROHE Grohtherm 800</p> */}
                     <div className="white-circle">
-                      <p className="com-text">{realProduct.comparisonResult?.remark}</p>
-                      <p className="com-text">{realProduct.comparisonResult?.rating}</p>
+                      <p className="com-text">{realProduct?.comparisonResult?.remark}</p>
+                      <p className="com-text">{realProduct?.comparisonResult?.rating}</p>
                       <p className="com-hed"></p>
                     </div>
                   </div>:null
@@ -260,7 +264,9 @@ const page =async (context) => {
                        data?.otherSubCategoriesList?.map((item3,i)=>(
                          <Link href={`/SubCategories/${item3?.subCategoryId}`} className="flex flex-col c-prod-box" key={i}>
                          <div className="c-prod-box--img rounded overflow-hidden">
-                           <Image src={item3?.subCategoryImage !==null ? imagePath+item3?.subCategoryImage:Bathroomfan} alt="bathroom" width={500} height={500} loading="lazy"/>
+                           <Image 
+                           src={item3?.subCategoryImage !==null ? imagePath+item3?.subCategoryImage:Bathroomfan} alt="bathroom" 
+                           width={500} height={500} loading="lazy"/>
                          </div>
                          <p className="c-prod-box--title">{item3?.subCategoryDisplayName}</p>
                        </Link>

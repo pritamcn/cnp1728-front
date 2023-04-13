@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { fetchSubCategories } from '@/app/data/SubCategories';
 import { imagePath } from '@/app/config';
+import { notFound } from 'next/navigation';
 export async function getdata(value) {
   const data = await fetchSubCategories(value);
   return {
@@ -13,7 +14,9 @@ export async function getdata(value) {
 const page = async (context) => {
   const { data } = await getdata(context.params.slug);
   const filteredCategories=data?.normalCategoriesList?.filter(x=>x.isThisInputId===true)
-  // console.log("SubCategorydata",data);
+  if (data?.message ==="Error Finding Normal Category") {
+    notFound();
+  }
   return (
     <section>
       <div className="container">
@@ -23,27 +26,31 @@ const page = async (context) => {
             <li><Link href="/" className="text-blue-600 hover:text-blue-400">Home</Link></li>
             <li><span className="c-breadcrumb-divider text-gray-500 text-lg mx-2">&#8250;</span></li>
             <li> 
-            <Link  href={`/TopCategories/${data.topCategoryId}`} className="text-blue-600 hover:text-blue-400">
-             {data.topCategoryDisplayName}
+            <Link  href={`/TopCategories/${data?.topCategoryId}`} className="text-blue-600 hover:text-blue-400">
+             {data?.topCategoryDisplayName}
             </Link>
             </li>
             <li><span className="c-breadcrumb-divider text-gray-500 text-lg mx-2">&#8250;</span></li>
             <li className="font-bold">
-              {filteredCategories[0].normalCategoryDisplayName}
+              {filteredCategories?.length >0 &&filteredCategories[0]?.normalCategoryDisplayName}
               </li>
           </ol>
       </nav>
-      <h1 className="mn-title">{filteredCategories[0].normalCategoryDisplayName}</h1>
+      <h1 className="mn-title">{filteredCategories?.length >0 && filteredCategories[0]?.normalCategoryDisplayName}</h1>
       </div>
-      <div className="c-prolist grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-6 lg:gap-6 mb-20">
+      <div className="c-prolist grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5 lg:gap-6 mb-20">
         {data?.subCategoriesList?.map((item)=>(
           <Link 
           href={`/SubCategories/${item?.subCategoryId}`}
-          className="flex flex-col items-center justify-center c-prod-box" key={item.subCategoryId}>
+          className="flex flex-col items-center justify-flex-start c-prod-box" key={item.subCategoryId}>
           <div className="c-prod-box--img rounded overflow-hidden">
-              <Image src={item.subCategoryImage !== null?imagePath+item.subCategoryImage:Prod1} alt="Prod1" width={500} height={500}/>
+              <Image 
+              src={item?.subCategoryImage !== null?imagePath+item?.subCategoryImage:Prod1} alt="Prod1" width={500} 
+              height={500}
+              loading='lazy'
+              />
           </div>
-          <p className="c-prod-box--title">{item.subCategoryDisplayName}</p>
+          <p className="c-prod-box--title">{item?.subCategoryDisplayName}</p>
         </Link>
         ))}     
       </div>

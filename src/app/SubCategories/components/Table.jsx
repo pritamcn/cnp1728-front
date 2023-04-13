@@ -57,11 +57,18 @@ const Table = ({value,SubCategoryName}) => {
     }, 0);
     }
     else if(Array.isArray(finalvalue[0].dynamicComparisonKeys[target]) && typeof(finalvalue[0].dynamicComparisonKeys[target][0]) ==="object"){
-      targetvalue=51
+   
+     
+      finalvalue.reduce((acc, value) => {
+        
+        targetvalue=value.dynamicComparisonKeys[target]?.map((singlevalue)=>(singlevalue.DisplayValue,singlevalue?.Type))?.join()?.length
+      }, 0)
+    
+      
+      // targetvalue=51
     }
     else {
       finalvalue.reduce((acc, value) => {
-        // console.log("check",acc,value,target);
         targetvalue=acc = acc > value.dynamicComparisonKeys[target].length ? acc : value.dynamicComparisonKeys[target].length
     }, 0);
     }
@@ -72,13 +79,17 @@ const Table = ({value,SubCategoryName}) => {
     //   return (acc = acc > value.yes[target].length ? acc : value.yes[target].length);
 
     // }, 0);
+    const getObj=(obj,keyOrder)=>{
+     return keyOrder.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {});
+
+    }
   return (
     <div className="table-div bg-gradient-linear from-linear-blue1 to-linear-blue2 py-10 mb-10">
 
         <p className="text-center mb-8">
-        {/* Place 1 - 7 of the */}
+      
              {value?.length -1} best fittings for the {SubCategoryName} in comparison</p> 
-        <div className="scroll-box scroll-box--fixed">
+        <div className={`scroll-box scroll-box--fixed  ${value?.length<6? "@screen lg:hidden @screen xd:hidden":null} `  }>
             <button className="move js-move" data-dir="prev" onClick={() => sliderRef.current.slickPrev()}>
                <span className="scroll-box--fixed-control-prev-icon" aria-hidden="true"></span>
             </button>
@@ -87,9 +98,8 @@ const Table = ({value,SubCategoryName}) => {
             </button>
         </div>
 
-
         <div className="table-compare table-award">
-            <div className="scroll-box scroll-box--topbar">
+            <div className={`scroll-box scroll-box--topbar  ${value?.length<6? "@screen lg:hidden @screen xd:hidden":null} `}>
                 <button className="move js-move" data-dir="prev" onClick={() => sliderRef.current.slickPrev()}>
                    <span className="scroll-box--topbar-control-prev-icon" aria-hidden="true"></span>
                 </button>
@@ -108,12 +118,13 @@ const Table = ({value,SubCategoryName}) => {
             swipeToSlide={value?.length>5?true:false}
             >
                 {value?.map((item,i)=>(
+                  
                     <div key={i}>
                         <div className="table-box table-hed">
                           {item?.Award !=='' && item?.Award !==null?
                          <span className="flex">
                          {(item?.AwardImg !==null && item?.AwardImg!=="")?
-                             <Image src={imagePath+item?.AwardImg} alt="Winner" width={50} height={50}/>  :null
+                             <Image src={imagePath+item?.AwardImg} alt="Winner" width={50} height={50} loading='lazy'/>  :null
                         }
                         {item?.Award}</span>
                           :
@@ -128,7 +139,7 @@ const Table = ({value,SubCategoryName}) => {
                         </div>
                         <div>{item?.Image !==""?
                          <div className='table-box table-image' >
-                            <Image src={item?.Image?.split(';->')[0]} alt="Hii" width={500} height={500}/>
+                            <Image src={item?.Image?.split(';->')[0]} alt="Hii" width={500} height={500} loading="lazy"/>
                             {(item?.Image?.split(';->')[1]).length>80?
                              <p>{(item?.Image?.split(';->')[1]).substring(0,80)}...</p>
                             :<p>{(item?.Image?.split(';->')[1])}</p>}
@@ -182,10 +193,12 @@ const Table = ({value,SubCategoryName}) => {
                            `}
                             key={i2}
                             >
+                            
                                 {Array.isArray(item2)? 
                                 <>
-                                {typeof(item2[1])==="string"?
+                                {typeof(item2[0])==="string"?
                                  <ul className="check-list">
+                                 
                                       {item2?.map((item3,i3)=>(
                                         <li key={i3}>
                                             {item3}
@@ -196,10 +209,11 @@ const Table = ({value,SubCategoryName}) => {
                                   <div>
                                    {item2?.map((item3,i3)=>(
                                         <p key={i3}>
-                                          {Object.entries(item3).map(([value],i4) => (
-                                            <>
-                                            {`${value}`}{i4===(Object.entries(item3).length)-1?null:","}
-                                            </>
+                                          {Object.entries(getObj(item3,[Object.keys(item3)[1],Object.keys(item3)[0]])).map(([,value],i4) => (
+                                            <span key={i4}>
+                                              
+                                            {`${value}`}{i4===(Object.entries(item3).length)-1?null:":"}
+                                            </span>
                                             ))}
                                         </p>
                                  ))}
@@ -207,23 +221,7 @@ const Table = ({value,SubCategoryName}) => {
                                 }
 
                                 </>
-                                  
-                                //   <div>
-                                //    {item2?.map((item3,i3)=>(
-                                //         <p key={i3}>
-                                //              {item3.DisplayValue}
-                                //         </p>
-                                //  ))}
-                                //   </div>
-                                //  <ul className="feat-list">
-                                //     {console.log("item2",item2)}
-                                //       {item2?.map((item3,i3)=>(
-                                //         <li key={i3}>
-                                //               {console.log("item2",item2)}
-                                //             {item3}
-                                //         </li>
-                                //  ))}
-                                //  </ul>
+                                 
                               :item2}
                             </div>
                         ))}
@@ -235,84 +233,7 @@ const Table = ({value,SubCategoryName}) => {
                         </div>
                     </div>
                 ))}
-                {/* {table?.map((item,i)=>(
-                      <div key={i}>
-                        <div className="table-box table-hed">{item?.Award ==="Winner"?
-                        <span className="flex winner"><Image src={Trophy} alt="Winner"/> {item?.Award}</span>:
-                        item?.Award==="Price Performance"?
-                        <span className="flex trophy"><Image src={Coins} alt="Coins"/> {item?.Award}</span>
-                        :
-                        item?.Award==="Saving Tip"?
-                        <span className="flex Saving"><Image src={Banknote} alt="Coins"/> {item?.Award}</span>:
-                       <div className='award2'>{item?.Award}</div> 
-                        }</div>
-
-                      
-                        <div>{item?.Image !==""?
-                         <div className='table-box table-image' >
-                            <Image src={Prod1} alt="Hii" />
-                            <p>{item?.Image?.split(',')[1]}</p>
-                            {item?.Image?.split(',')[2]}
-                        </div>
-                        :
-                        <div className='table-box table-image'>
-                           <div className='table-image-txt'></div>
-                        </div>
-                        }</div>
-
-                        
-                        <div className="table-box table-customer-ratting">
-                            {item?.Customeronamazon?.split(',')[0] !=="CUSTOMER ON AMAZON" ?
-                        <div className="table-ratting text-center">
-                         <Rating value={item?.Customeronamazon?.split(',')[0]}  size="fs-2" />
-                         <p className="spl-rev">
-                            {item?.Customeronamazon?.split(',')[1]}
-                         </p>
-                        </div>
-                        :item?.Customeronamazon?.split(',')[0]}
-                        </div>
-
-                        
-                        <div className="table-box table-btn">
-                            <Link href="/ProductDetails/room_fan" className="btn-view-all">
-                                {item?.details}
-                            </Link>
-                        </div>
-
-                        
-                        <div className='table-box table-goodbox'>
-                            <div className="com-box">
-                                <p className='com-text'>{item?.comparisonResult?.split(',')[0]}</p>
-                                <p className='com-hed'>{item?.comparisonResult?.split(',')[1]}</p>
-                            </div>
-                        </div>
-                        
-
-                        <div className='table-box table-offerbox'>{item?.comparison}</div>
-                        
-
-                        <div className='table-box table-brand'>{item?.brand}</div>
-                        
-
-                        <div className='table-box table-features'>
-                        <ul className="feat-list">
-                            {item?.features?.split('<br/>')?.map((value,i2)=>(
-                                <li key={i2}>{value}</li>
-                            ))}
-                            </ul>
-                        </div>
-                        
-
-                        <div className='table-box table-logo'>
-                        {item?.availableat !=="AVAILABLE AT"?
-                            <Image src={Amazon} alt="amazon"/>
-                        :item?.availableat}
-                        </div>
-
-
-                      </div>
-                    
-                ))} */}
+               
             </Slider>
         </div>
         

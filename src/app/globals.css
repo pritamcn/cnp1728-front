@@ -270,11 +270,16 @@ p {
   margin-right: 0;
 }
 .tab-square-icon {
-  height: 40px;
-  /*    @apply h-10;   */
+  /*height: 40px;
+  object-fit: cover;
+  overflow: hidden;*/
+  width: 50px; height: 50px;
+  border-radius: 100%;
+  @apply object-cover overflow-hidden;
 }
 .tab-square-icon img {
-  object-fit: cover;
+  height: 50px;
+  @apply object-cover;
 }
 .tab-square > label {
   display: block;
@@ -299,10 +304,18 @@ p {
   }
 .tab-content-square {
   /* display: none; */
-  position: relative;
+  @apply relative;
   top: -4px;
   transition: opacity 0.15s linear;
 }
+  .tab-square--pic {
+    @apply w-[85%] h-[255px] overflow-hidden object-cover text-center mx-auto my-0 border-[#f3f4f6] border-solid border-[2px];
+  }
+    .tab-square--pic img {
+      width: auto !important;
+      height: 255px !important;
+      margin: 0 auto;
+    }
 
 /*.tabbed-square [type="radio"]:nth-of-type(1):checked ~ .tabs-square .tab-square:nth-of-type(1) label,
 .tabbed-square [type="radio"]:nth-of-type(2):checked ~ .tabs-square .tab-square:nth-of-type(2) label,
@@ -347,13 +360,15 @@ Comp-Box Styles
 
 .comp-box .img-cvr {
     height: 185px;
-    @apply w-full block object-cover;
+    @apply w-auto block object-contain;
 }
     .comp-box .img-cvr > img {
-        @apply max-w-full h-auto object-cover mx-auto my-0;
+      height: 185px;
+        @apply w-auto object-contain mx-auto my-0;
     }
 
 .comp-box .comp-name {
+    height: 60px;
     font-size: 13px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -674,11 +689,14 @@ Tab Scroll Arrow Styles
 
 .c-tab .c-tab-icon {
   /*        height: 40px;*/
-  @apply h-10;
+  border-radius: 100%;
+  overflow: hidden;
+  width: 50px; height: 50px;
 }
 .c-tab .c-tab-icon img {
   /*            object-fit: cover;*/
   @apply object-cover;
+  height: 50px; 
 }
 .pg-title .mn-title {
   font-family: theme("fontFamily.hd");
@@ -696,7 +714,8 @@ Tab Scroll Arrow Styles
         height: auto;
         overflow: hidden;
         text-align: center;*/
-        @apply w-auto h-auto overflow-hidden text-center;
+        height: 223px;
+        @apply border w-auto overflow-hidden text-center object-cover;
     }
     .c-prod-box .c-prod-box--img img {
       /*margin: 0 auto; 
@@ -707,9 +726,9 @@ Tab Scroll Arrow Styles
       border-radius: 0 !important;
       border-radius: 3px;*/
 
-      width: 219px; 
-/*        height: 223px; */
-      @apply h-auto object-contain object-top mx-auto my-0;
+      width: 100%; 
+      height: 223px;
+      @apply  object-top object-cover mx-auto my-0;
       @apply rounded-none !important;
   }
       .c-prod-box.c-prod-box--border .c-prod-box--img img {
@@ -783,6 +802,7 @@ Featured Category Homepage Styles
 ========================================================================== */
 .c-featured-cat {
   background-image: url("../img/blue-bg.jpg");
+  background-size: 100% auto;
   @apply bg-right-top bg-no-repeat; 
 }
 .Details .view-all{
@@ -1090,24 +1110,27 @@ top: -630px;
       background: linear-gradient(180deg, #0D6296 35.4%, #084F7B 119.47%);
   }
 
-  .blue-box P{
-      border-bottom: 1px solid #1D70A4;
+  .blue-box-p{
+      border-bottom: 1px solid #1D70A4 !important;
   }
 
   .yellow-box{
       background: linear-gradient(180deg, #B9BC1B 35.4%, #9E900C 119.47%);
   }
 
-  .yellow-box p{
-      border-bottom: 1px solid #CCCC2C;
+  .yellow-box-p{
+      border-bottom: 1px solid #CCCC2C !important;
   }
 
   .gren-box{
       background: linear-gradient(180deg, #31C16B 35.4%, #1F966B 119.47%);
   }
 
-  .gren-box p{
-      border-bottom: 1px solid #53D38A;
+  .gren-box-p{
+      border-bottom: 1px solid #53D38A !important;
+  }
+  .null-box-p{
+    border-bottom: none !important;
   }
   .table-detail > tbody > tr td { 
     border-bottom: #dee2e6 solid 1px; 
@@ -1372,12 +1395,13 @@ Comp-Box Styles
     }
 
     .c-comparisions-slider--img {
-        @apply object-cover;
+        height: 160px;
+        @apply object-cover overflow-hidden border;
     }
-        
-        .c-comparisions-slider--img img {
-            @apply max-w-full object-cover;
-        }
+      .c-comparisions-slider--img img {
+          height: 160px;
+          @apply max-w-full object-cover m-0 p-0;
+      }
 
     .c-comparisions-slider-item h3 {
         /*font-size: 20px;
@@ -1669,11 +1693,11 @@ Table SCROLL BOX Styles
     .scroll-box--topbar > button{
         @apply bg-transparent border-0;
     }
-    @media (max-width: 767px) {
+    /*@media (max-width: 767px) {
         .scroll-box--topbar {
             @apply hidden;
         }
-    }
+    }*/
 
 .scroll-box--topbar-control-prev-icon, .scroll-box--topbar-control-next-icon {
     background-position: 50%;
@@ -1775,6 +1799,27 @@ Tab AWARD Styles
   position: relative;
   object-fit: cover;
 } 
+  @media (max-width: 1023px) {
+    .table-compare .table-image {
+      height: 300px;
+    }
+  }
+  @media (max-width: 767px) {
+    .table-compare .table-image {
+      height: 320px;
+    }
+  }
+  @media (max-width: 667px) {
+    .table-compare .table-image {
+      height: 340px;
+    }
+  }
+  @media (max-width: 575px) {
+    .table-compare .table-image {
+      height: 370px;
+    }
+  }
+
   .table-compare .table-image img {
     width: auto;
     height: 150px;
@@ -2369,3 +2414,22 @@ Tab AWARD Styles
     width: 100% !important; 
   }
 }*/
+
+
+
+.c-prolist-smallbox .c-prod-box--img, 
+.c-prolist-smallbox .c-prod-box--img img {
+  height: 145px;
+}
+
+.rgt-side-pic {
+  width: 80%;
+  height: 300px;
+  margin: 0 auto 30px;
+  border: #eee solid 1px;
+}
+  .rgt-side-pic img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }

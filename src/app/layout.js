@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         {children}
-        <NewComparison/>
+        {/* <NewComparison/> */}
         <Footer/>
       </body>
     </html>

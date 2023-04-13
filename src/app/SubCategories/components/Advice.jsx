@@ -15,11 +15,11 @@ function renderMarkdownToHTML(markdown) {
 }
 const Advice = ({value}) => {
   const [tab, settab] = useState("");
-  const markup = renderMarkdownToHTML(value.AdviceDescription);
-  const markupOverView = renderMarkdownToHTML(value.OverviewDescription);
-  const markupCosts = renderMarkdownToHTML(value.CostsDescription);
-  const markupBrand = renderMarkdownToHTML(value.BrandDescription);
-  const markupReports = renderMarkdownToHTML(value.ReportsDescription);
+  const markup = renderMarkdownToHTML(value?.AdviceDescription);
+  const markupOverView = renderMarkdownToHTML(value?.OverviewDescription);
+  const markupCosts = renderMarkdownToHTML(value?.CostsDescription);
+  const markupBrand = renderMarkdownToHTML(value?.BrandDescription);
+  const markupReports = renderMarkdownToHTML(value?.ReportsDescription);
   useEffect(() => {
     if(tab ===""){
      if(value?.OverviewDescription !==""){
@@ -147,8 +147,12 @@ const Advice = ({value}) => {
                 </div> :null}
 
                 <div className="w-full md:w-2/5 md:ml-10">
-                  <Image src={value?.OverviewImage !==""?imagePath+value?.OverviewImage:OverView} className="w-full mb-10" alt="overview" width={400} height={400}/>
-                  <div className="flex  justify-center">
+                  <div className="rgt-side-pic">
+                    <Image 
+                    src={value?.OverviewImage !==""?imagePath+value?.OverviewImage:OverView} className="w-full mb-10" 
+                    alt="overview" width={400} height={400} loading="lazy"/>
+                  </div>
+                  <div className="flex justify-center">
                     <h3 className=" text-light-blue2 font-semibold font-body">
                       {value?.OverviewImageTitle !=="" ?value?.OverviewImageTitle :null}
                     </h3>

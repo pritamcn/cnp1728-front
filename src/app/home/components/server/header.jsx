@@ -14,6 +14,7 @@ const header = async({data}) => {
     <Image
       src={Logo}
       alt="Logo"
+      loading="lazy"
     />
       </div>
       </Link>

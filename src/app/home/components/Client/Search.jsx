@@ -15,7 +15,7 @@ const Search = ({value}) => {
   return (
     <div className="search relative z-20">
     <Image 
-    className="search-img" src={SearchImage} alt="search"/>
+    className="search-img" src={SearchImage} alt="search" loading='lazy'/>
       <input type="text" className="form-control" 
       placeholder="Please enter your desired requirement"
       value={search}

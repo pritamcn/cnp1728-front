@@ -1,5 +1,6 @@
 
 import Header from "@/app/Common/Header"
+import NewComparison from "@/app/Common/NewComparison";
 import { fetchProductDetails } from "@/app/data/ProductDetails";
 
 export const metadata = {
@@ -18,6 +19,7 @@ export default async function ProductDetailsLayout({ children,params }) {
       <div>
         <Header params={data}/>
         {children}
+        <NewComparison/>
       </div>
   )
 }

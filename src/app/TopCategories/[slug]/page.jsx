@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { baseURL,imagePath} from "../../config";
 import { fetchNormalCategories } from '@/app/data/NormalCategories';
+import { notFound } from 'next/navigation';
 export async function getdata(value) {
   const data = await fetchNormalCategories(value);
   return {
@@ -12,7 +13,9 @@ export async function getdata(value) {
 }
 const TopCategoryList = async(context) => {
   const { data } = await getdata(context.params.slug);
-  console.log("data",data);
+  if (data?.message ==="Error Finding Parent Category") {
+    notFound();
+  }
   return (
     <section>
       <div className="container">
@@ -26,13 +29,13 @@ const TopCategoryList = async(context) => {
       </nav>
       <h1 className="mn-title">{data.topCategoryDisplayName}</h1>
       </div>
-      <div className="c-prolist grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 sm:gap-6 lg:gap-6 mb-20">
+      <div className="c-prolist grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 md:grid-cols-4 lg:grid-cols-5 lg:gap-6 mb-20">
         {data?.normalCategoriesList?.length >0 && data?.normalCategoriesList?.map((item)=>(
             <Link 
             href={`/NormalCategories/${item?.normalCategoryId}`}
-            className="flex flex-col items-center justify-center c-prod-box" key={item.normalCategoryId}>
+            className="flex flex-col items-center justify-flex-start c-prod-box" key={item.normalCategoryId}>
             <div className="c-prod-box--img rounded overflow-hidden">
-                <Image src={item.normalCategoryImage !== null?imagePath+item.normalCategoryImage:Prod1} alt="Prod1" width={500} height={500}/>
+                <Image src={item.normalCategoryImage !== null?imagePath+item.normalCategoryImage:Prod1} alt="Prod1" width={500} height={500} loading="lazy"/>
             </div>
             <p className="c-prod-box--title">{item.normalCategoryDisplayName}</p>
           </Link>
@@ -41,9 +44,10 @@ const TopCategoryList = async(context) => {
         data?.level3CategoriesList?.map((item2)=>(
           <Link 
             href={`/SubCategories/${item2?.level3CategoryId}`}
-            className="flex flex-col items-center justify-center c-prod-box" key={item2?.level3CategoryId}>
+            className="flex flex-col items-center justify-flex-start c-prod-box" key={item2?.level3CategoryId}>
             <div className="c-prod-box--img rounded overflow-hidden">
-                <Image src={item2?.level3CategoryImage !== null?imagePath+item2?.level3CategoryImage:Prod1} alt="Prod1" width={500} height={500}/>
+                <Image src={item2?.level3CategoryImage !== null?imagePath+item2?.level3CategoryImage:Prod1} alt="Prod1" 
+                width={500} height={500} loading='lazy'/>
             </div>
             <p className="c-prod-box--title">{item2?.level3CategoryDisplayName}</p>
           </Link>

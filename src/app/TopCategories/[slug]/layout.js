@@ -1,4 +1,5 @@
 import Header from "@/app/Common/Header"
+import NewComparison from "@/app/Common/NewComparison";
 import { fetchNormalCategories } from "@/app/data/NormalCategories";
 
 export const metadata = {
@@ -17,6 +18,7 @@ export default async function TopCategoriesLayout({ children,params }) {
       <div>
         <Header params={data}/>
         {children}
+        <NewComparison/>
       </div>
   )
 }

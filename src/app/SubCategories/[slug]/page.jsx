@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { fetchComparisons } from '@/app/data/Comparisons';
 import { imagePath } from '@/app/config';
 import { Remarkable } from 'remarkable';
+import { notFound } from 'next/navigation';
 const md = new Remarkable({
   html:         true,        // Enable HTML tags in source
   xhtmlOut:     true,        // Use '/' to close single tags (<br />)
@@ -26,6 +27,9 @@ const page = async(context) => {
   const { data } = await getdata(context.params.slug);
   const filteredNormalCategories=data?.normalCategoriesList?.filter(x=>x.isThisInputId===true)
   const markup = renderMarkdownToHTML(data?.subCategoryAdvice?.Description);
+  if (data?.message ==="Error Finding  subCategory") {
+    notFound();
+  }
   return (
     <section>
      <div className="container">
@@ -74,13 +78,13 @@ const page = async(context) => {
   }  
  
   <div className="w-full lg:w-8/12 mx-auto mb-10">
-  <div className="c-prolist grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6 lg:gap-6">
+  <div className="c-prolist c-prolist-smallbox grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-6 lg:gap-6">
     {data?.otherSubCategoriesList?.length >0 ?data?.otherSubCategoriesList?.map((item)=>(
        <Link 
        href= {`/SubCategories/${item.subCategoryId}`} className="flex flex-col items-center justify-start c-prod-box" key={item?.subCategoryId}>
        <div className="c-prod-box--img rounded overflow-hidden">
        <Image src={item?.subCategoryImage!==null ?imagePath+item?.subCategoryImage:Prod1} 
-       alt="Other Sub Category" width={150} height={150}/>
+       alt="Other Sub Category" width={150} height={150} loading='lazy'/>
        </div>
        <p className="c-prod-box--title">{item?.subCategoryDisplayName}</p>
        </Link>

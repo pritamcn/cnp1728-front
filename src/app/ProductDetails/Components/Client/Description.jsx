@@ -7,6 +7,7 @@ import AmazonFullIcon from "../../../../img/details/amaon-full.png";
 import Rating from '@/app/Common/Rating';
 import { renderMarkdownToHTML } from '@/app/Common/Rendermarkdowntohtml';
 import { imagePath } from '@/app/config';
+import Link from 'next/link';
 const Description = ({value,id}) => {
     const Description = useRef();
     const [more, setmore] = useState("");
@@ -17,8 +18,15 @@ function handleDescription() {
 function handleComparison() {
     Comparison.current.scrollIntoView({ behavior: "smooth" });
   }
- 
+ const getProductRelatedInfo=(key)=>{
+   let data=value?.productRelatedInfo[`${key}`]
+   return data
+ }
+ const getObj=(obj,keyOrder)=>{
+  return keyOrder.reduce((acc, key) => ({ ...acc, [key]: obj[key] }), {});
+ }
 let realProduct=value?.otherProductsList?.filter((product)=>product?.productId ==id)[0]
+let comparisonproduct=value?.otherProductsList?.filter((product)=>product?.productId !=id)?.slice(0,3)
   return (
     <>
                 <div className="c-top-mid c-test--col order-1 md:order-none">
@@ -29,12 +37,6 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                    </div>
                     :null
                   }
-                   {/* {realProduct?.priceComparison?.length >0 ?
-                    <div className="c-btn c-btn--border-shadow inline-block mr-1 mb-5" onClick={handleComparison}>
-                    Price Comparison
-                    </div>
-                  :null
-                  } */}
                       {realProduct?.description !=="" && realProduct?.description !==null?
                       <div className="detail-box text-size15">
                         <p className="text-size15" dangerouslySetInnerHTML={renderMarkdownToHTML(realProduct?.description)}>
@@ -62,10 +64,12 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                     <div className="px-3.5">
                       <h3 className="mb-1">PRODUCTS IN COMPARISON</h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {value?.otherProductsList?.slice(0,3)?.map((item,i)=>(
-                            <div className={`rounded-md detail-color-box ${i===0?
+                        {comparisonproduct?.map((item,i)=>(
+                            <Link href={`/ProductDetails/${item?.productId}`} className={`rounded-md detail-color-box ${i===0?
                               "blue-box":i===1?"yellow-box":"gren-box"}`} key={i}>
-                            <p className="text-wht">{item?.productName}</p>
+                            <p className={`text-wht ${item?.firstAward !=="" && item?.firstAward !==null ? 
+                            `${i===0?
+                              "blue":i===1?"yellow":"gren"}-box-p`:"null-box-p"}`}>{item?.productName?.slice(0,80)}</p>
                             {item?.firstAward !=="" && item?.firstAward !==null ? 
                              <span>
                              <Image
@@ -74,13 +78,14 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                                alt="trophy"
                                width={21}
                                height={21}
+                               loading='lazy'
                              />{" "}
                              {item?.firstAward}
                            </span>
                             
                             :null}
                            
-                          </div>
+                          </Link>
                         ))}
                       </div>
                     </div>
@@ -92,7 +97,11 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
 
                       <div className="overflow-hidden">
                         <div className="lg:w-4/12 lg:float-left lg:text-center">
-                          <Image className="lg:ml-auto lg:mr-auto" src={value?.images[0]} alt="" width={200} height={200} loading='lazy'/>
+                          {value?.images?.length >0 && 
+                          <Image className="lg:ml-auto lg:mr-auto" 
+                          src={value?.images[0]} alt="" width={200} height={200} loading='lazy'/>
+                          }
+                          
                         </div>
 
                         
@@ -103,10 +112,6 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                             <p dangerouslySetInnerHTML={renderMarkdownToHTML(realProduct?.itemDescription)}>
 
                             </p>
-
-                            {/*<div className="grid grid-cols-3 gap-4">
-                            <Image src={value?.images[0]} alt="" width={900} height={900} loading='lazy'/>
-                            </div>*/}
                           </div>
                         
                       </div>
@@ -115,123 +120,7 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                   </div>
                   :null
                   }
-                  {/************* end c-itemdescrip-box ************/}
-
-
-
-                  {/* {realProduct?.priceComparison} */}
-                  {/* <div className="c-pricecomparison-box c-test--col order-6 md:order-none mb-20">
-                    <div className="px-3.5">
-                      <h2 className="mb-2" ref={Comparison}>PRICE COMPARISION</h2>
-                      <div className="detail-box text-size15">
-                        <p>
-                          The bathtub faucet can be purchased from Amazon for
-                          around €166. In October 2022, you can also buy the bath
-                          tap at other online shops. Our price comparison shows
-                          which of the 8 online retailers listed here for the
-                          Grohe Grohtherm 800 thermostats.
-                        </p>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 items-center justify-center bg-white rounded-md p-2 md:p-4 c-to-offer">
-                        <div className="flex flex-col items-start">
-                          <div className="amz-price">€165.98</div>
-                          <p className="shippi mb-0">Free Shipping</p>
-                        </div>
-
-                        <Image src={AmazonFullIcon} alt="AmaonFull" />
-
-                        <div className="col-span-1 text-right">
-                          <a
-                            href="#"
-                            className="c-btn c-btn--gradient-dark text-center"
-                          >
-                            <Image src={ShoppingCart} alt="Shooping_cart" /> To
-                            Offer
-                          </a>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 items-center justify-center bg-white rounded-md p-2 md:p-4 c-to-offer">
-                        <div className="flex flex-col items-start">
-                          <div className="amz-price">€165.98</div>
-                          <p className="shippi mb-0">Free Shipping</p>
-                        </div>
-
-                        <Image src={AmazonFullIcon} alt="AmaonFull" />
-
-                        <div className="col-span-1 text-right">
-                          <a
-                            href="#"
-                            className="c-btn c-btn--gradient-dark text-center"
-                          >
-                            <Image src={ShoppingCart} alt="Shooping_cart" /> To
-                            Offer
-                          </a>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 items-center justify-center bg-white rounded-md p-2 md:p-4 c-to-offer">
-                        <div className="flex flex-col items-start">
-                          <div className="amz-price">€165.98</div>
-                          <p className="shippi mb-0">Free Shipping</p>
-                        </div>
-
-                        <Image src={AmazonFullIcon} alt="AmaonFull" />
-
-                        <div className="col-span-1 text-right">
-                          <a
-                            href="#"
-                            className="c-btn c-btn--gradient-dark text-center"
-                          >
-                            <Image src={ShoppingCart} alt="Shooping_cart" /> To
-                            Offer
-                          </a>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 items-center justify-center bg-white rounded-md p-2 md:p-4 c-to-offer">
-                        <div className="flex flex-col items-start">
-                          <div className="amz-price">€165.98</div>
-                          <p className="shippi mb-0">Free Shipping</p>
-                        </div>
-
-                        <Image src={AmazonFullIcon} alt="AmaonFull" />
-
-                        <div className="col-span-1 text-right">
-                          <a
-                            href="#"
-                            className="c-btn c-btn--gradient-dark text-center"
-                          >
-                            <Image src={ShoppingCart} alt="Shooping_cart" /> To
-                            Offer
-                          </a>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2 items-center justify-center bg-white rounded-md p-2 md:p-4 c-to-offer">
-                        <div className="flex flex-col items-start">
-                          <div className="amz-price">€165.98</div>
-                          <p className="shippi mb-0">Free Shipping</p>
-                        </div>
-
-                        <Image src={Toolineo} alt="AmaonFull" />
-
-                        <div className="col-span-1 text-right">
-                          <a
-                            href="#"
-                            className="c-btn c-btn--gradient-dark text-center"
-                          >
-                            <Image src={ShoppingCart} alt="Shooping_cart" /> To
-                            Offer
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div> */}
-                  {/*********** end c-pricecomparison-box ************/}
-                  
-
                 </div>
-                {/*end w-4/6 border*/}
-
-                
-
 
                 <div className="w-full md:w-2/6 flex flex-col order-4 md:order-none">
 
@@ -307,7 +196,72 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                            </tr>
                             :null}
                            
-                            {value?.productRelatedInfo?.productFeature !="" ? 
+                             {value?.productRelatedInfo !="" ?
+                             Object.keys(value?.productRelatedInfo)?.map((item,i)=>(
+                              <tr key={i}>
+                                <td>{item}</td>
+                                {Array.isArray(getProductRelatedInfo(item))?
+                                typeof(getProductRelatedInfo(item)[0])==="string"?
+                            <td>
+                              <ul className="feat-list lists-2">
+                                {getProductRelatedInfo(item)?.map((item2,i2)=>(
+                                      <li key={i2}>
+                                         <div className="feat-box">
+                                    {more !==i2 ?
+                                     <p>
+                                     {item2 ?.slice(0,50)}
+                                     <br />
+                                     {item2?.length >50 &&  
+                                     <div onClick={()=>setmore(i2)} className='text-[#3c88cf] cursor-pointer'>more</div> }
+                                    
+                                   </p>
+                                    :
+                                    <p>
+                                    {item2}
+                                    <br />
+                                    {item2?.length >50 && 
+                                     <div onClick={()=>setmore("")} className='text-[#3c88cf] cursor-pointer'>less</div>
+                                    }
+                                   
+                                  </p>
+                                    }
+                                  </div>
+                                      </li>
+                                ))}
+                              </ul>
+                            </td>
+                                :
+                               <td>
+                                {getProductRelatedInfo(item)?.map((item3,i3)=>(
+                                  <span key={i3}>
+                                     {Object.entries(getObj(item3,[Object.keys(item3)[1],Object.keys(item3)[0]])).map(([,value],i4) => (
+                                            <span key={i4}>
+                                            {`${value}`}{i4===(Object.entries(item3).length)-1?null:":"}
+                                            </span>
+                                            ))}
+                                            {/* if logic is not true */}
+                                             {/* {Object.entries(item3).map(([,value],i4) => (
+                                            <span key={i4}>
+                                            {`${value}`}{i4===(Object.entries(item3).length)-1?null:":"}
+                                            </span>
+                                            ))} */}
+                                    <br/>
+                                  </span>
+                                ))}
+                               </td>
+                                :
+                                <td>
+                                    <span className="det-text">
+                                    {getProductRelatedInfo(item)}
+                                </span>
+                              
+                                  </td>
+                              }
+                                
+                              </tr>
+                             ))
+                             :null}
+                            {/* {value?.productRelatedInfo?.productFeature !="" ? 
                             <tr>
                             <td>Features</td>
                             <td>
@@ -334,30 +288,12 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                                 ))}
                                
 
-                                {/* <li>
-                                  <div className="feat-box">
-                                    <p>
-                                      Single lever mixer | low noise
-                                      <br />
-                                      <a href="#">More</a>
-                                    </p>
-                                  </div>
-                                </li>
-
-                                <li>
-                                  <div className="feat-box">
-                                    <p>
-                                      DIN connectors | Easy construction
-                                      <br />
-                                      <a href="#">More</a>
-                                    </p>
-                                  </div>
-                                </li> */}
+                               
                               </ul>
                             </td>
                           </tr>
                             
-                            :null}
+                            :null} */}
                             {realProduct?.priceComparison !==null ?
                              <tr>
                              <td>Available At</td>
@@ -365,7 +301,9 @@ let realProduct=value?.otherProductsList?.filter((product)=>product?.productId =
                                {realProduct?.priceComparison?.map((item2,i)=>(
                                      
                                <div className="available-box flex flex-col justify-start md:flex-row mb-6 pb-6 pl-3 pr-3" key={i}>
-                                 <div className=""><Image src={item2?.logo !==""?imagePath+item2?.logo:AmazonFullIcon} alt="AmazonFull" width={63} height={63} /></div>
+                                 <div className=""><Image src={item2?.logo !==""?imagePath+item2?.logo:AmazonFullIcon} alt="AmazonFull" width={63} height={63} 
+                                 loading='lazy'
+                                 /></div>
                                  <div className="pl-3">€{item2?.price}</div>
                                </div>
                                ))}
